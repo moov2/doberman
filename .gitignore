@@ -1,0 +1,9 @@
+*.suo
+
+bin/
+obj/
+
+Doberman.Kennel/js/
+Doberman.Kennel/css/
+
+deploy/

@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doberman", "Doberman\Doberman.csproj", "{C045232F-DFFE-465F-B10A-FE5E5DDC5A7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doberman.Tests.Unit", "Doberman.Tests.Unit\Doberman.Tests.Unit.csproj", "{80C7F5F2-7DA0-48EA-AAD9-2A2474B765A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doberman.Tests.Integration", "Doberman.Tests.Integration\Doberman.Tests.Integration.csproj", "{1949162B-27BE-4EC6-8D7B-E2672B0FE0A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doberman.Example.Mvc3", "Doberman.Example.Mvc3\Doberman.Example.Mvc3.csproj", "{9C3CA671-9D78-462D-9EF0-5E5EE76CB32A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doberman.Example.WebForms", "Doberman.Example.WebForms\Doberman.Example.WebForms.csproj", "{ADA47C39-F7FD-4CBC-954C-F12C4BD3A971}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1E90C84A-2DA2-436E-86EF-BE29EDAC6924}"
+	ProjectSection(SolutionItems) = preProject
+		build\commit.build = build\commit.build
+		build\doberman.build = build\doberman.build
+		build\kennel.build = build\kennel.build
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C045232F-DFFE-465F-B10A-FE5E5DDC5A7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C045232F-DFFE-465F-B10A-FE5E5DDC5A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C045232F-DFFE-465F-B10A-FE5E5DDC5A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C045232F-DFFE-465F-B10A-FE5E5DDC5A7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C7F5F2-7DA0-48EA-AAD9-2A2474B765A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C7F5F2-7DA0-48EA-AAD9-2A2474B765A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C7F5F2-7DA0-48EA-AAD9-2A2474B765A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C7F5F2-7DA0-48EA-AAD9-2A2474B765A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1949162B-27BE-4EC6-8D7B-E2672B0FE0A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1949162B-27BE-4EC6-8D7B-E2672B0FE0A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1949162B-27BE-4EC6-8D7B-E2672B0FE0A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1949162B-27BE-4EC6-8D7B-E2672B0FE0A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C3CA671-9D78-462D-9EF0-5E5EE76CB32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C3CA671-9D78-462D-9EF0-5E5EE76CB32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C3CA671-9D78-462D-9EF0-5E5EE76CB32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C3CA671-9D78-462D-9EF0-5E5EE76CB32A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA47C39-F7FD-4CBC-954C-F12C4BD3A971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA47C39-F7FD-4CBC-954C-F12C4BD3A971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA47C39-F7FD-4CBC-954C-F12C4BD3A971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA47C39-F7FD-4CBC-954C-F12C4BD3A971}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

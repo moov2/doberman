@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<project name="doberman" default="default" basedir="../">
+
+	<property name="basedir" value="${project::get-base-directory()}" />
+
+	<!-- tools used to assist the build process -->
+	<property name="tools.dir" value="${basedir}build\tools" />
+	<property name="nantcontrib.dll" value="${tools.dir}\nantcontrib-0.91-rc1\libs\NAnt.Contrib.Tasks.dll" />
+
+	<!-- solution properties -->
+	<property name="solution.file" value="Doberman.sln" />
+	<property name="framework.version" value="net-4.0" />
+
+	<!-- deploy settings -->
+	<property name="deploy.dir" value="${basedir}\deploy\" />
+
+	<!-- testing settings -->
+	<property name="test-reports.dir" value="${deploy.dir}\reports" />
+	<property name="nunit.exe" value="${basedir}\packages\NUnit.2.5.10.11092\tools\nunit-console.exe" />
+ 	<property name="unit.tests.dll" value="${basedir}\Doberman.Tests.Unit\bin\debug\Doberman.Tests.Unit.dll" />
+ 	<property name="integration.tests.dll" value="${basedir}\Doberman.Tests.Integration\bin\debug\Doberman.Tests.Integration.dll" />
+
+ 	<!-- release settings -->
+ 	<property name="release.dir" value="${deploy.dir}\release" />
+ 	<property name="doberman.dll" value="${basedir}\Doberman\bin\Release\Doberman.dll" />
+ 	<property name="doberman.pdb" value="${basedir}\Doberman\bin\Release\Doberman.pdb" />
+
+	<!-- tools used to assist the build process -->
+	<loadtasks>
+		<fileset>
+			<include name="${nantcontrib.dll}" />
+		</fileset>
+	</loadtasks>
+
+	<!-- builds the whole lot! -->
+	<target name="default" depends="clean, prepare, compile, test, release, zip" />
+
+	<!-- deletes any folders that are created during the build process. -->
+	<target name="clean">
+		<delete dir="${test-reports.dir}" failonerror="false" />
+    	<delete dir="${deploy.dir}" failonerror="false" />
+	</target>
+
+	<!-- creates any folders that are required for the build. -->
+	<target name="prepare">
+		<mkdir dir="${test-reports.dir}" />
+    	<mkdir dir="${deploy.dir}" />
+	</target>
+
+	<!-- compiles the solution to ensure there are no errors in the code -->
+	<target name="compile">
+		<exec 	program="${framework::get-framework-directory(framework.version)}\MSBuild.exe"
+          		commandline="${solution.file} /t:Clean,Build"
+          		workingdir="."
+          		failonerror="true"/>
+	</target>
+
+	<!-- tests the doberman library -->
+	<target name="test">
+		<exec program="${nunit.exe}"
+          	  commandline='"${unit.tests.dll}" /xml:"${test-reports.dir}/unit-tests.xml"'
+          	  workingdir="."
+          	  failonerror="true"  />
+          
+       	<exec program="${nunit.exe}"
+          	  commandline='"${integration.tests.dll}" /xml:"${test-reports.dir}/integration-tests.xml"'
+          	  workingdir="."
+          	  failonerror="true"  />
+	</target>
+
+	<!-- 
+		builds a release of the solution and then copies the Doberman class 
+		library files to the release directory.
+	-->
+	<target name="release">
+		<exec program="${framework::get-framework-directory(framework.version)}\MSBuild.exe"
+          	  commandline="${solution.file} /t:rebuild /p:Configuration=Release"
+              workingdir="."
+          	  failonerror="true"/>
+
+        <copy todir="${release.dir}" file="${doberman.dll}" overwrite="true" />
+        <copy todir="${release.dir}" file="${doberman.pdb}" overwrite="true" />
+	</target>
+
+	<!-- zips the release files. -->
+	<target name="zip">
+		<zip zipfile="${release.dir}\Doberman.zip">
+			<fileset basedir="${release.dir}">
+				<include name="**/**" />
+			</fileset>
+		</zip>
+
+		<delete>
+			<fileset basedir="${release.dir}">
+				<exclude name="*.zip" />
+				<include name="**/**" />
+			</fileset>
+		</delete>
+	</target>
+
+</project>
