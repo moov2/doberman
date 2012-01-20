@@ -2,7 +2,7 @@
 using System.Web;
 using System.Collections.Generic;
 using Doberman.Model;
-using Newtonsoft.Json; 
+using System.Web.Script.Serialization; 
 
 namespace Doberman
 {
@@ -49,7 +49,7 @@ namespace Doberman
 
         public static void Json(HttpResponse response, IList<DobermanResult> results)
         {
-            var json = JsonConvert.SerializeObject(results);
+            var json = new JavaScriptSerializer().Serialize(results);
 
             response.Clear();
             response.ContentType = "application/json";
