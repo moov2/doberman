@@ -119,3 +119,40 @@ Alternatively you can specify your own in the constructor of your DobermanContro
             Configuration.AddSqlConnectionString(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
         }
     }
+    
+### Mongo DB Connecting
+
+Checks to see if a connection can be established with a Mongo server, if one can be established then the check is passed, otherwise it fails. Doberman will automatically run this check if there is an appSetting with the key of 'MongoServer' in the Web.config, like below.
+
+    <configuration>
+        <appSettings>
+            <add key="MongoServer" value="mongodb://localhost/" />
+        </appSettings>
+    </configuration>
+
+Alternatively you can specify your own in the constructor of your DobermanController or DobermanPage as shown below.
+
+#### MVC
+
+    public class DobermanController : BaseDobermanController
+    {
+        public DobermanController() : base()
+        {
+            Configuration.AddMongoConnectionString("mongodb://localhost");
+        }
+    }
+
+#### Web Forms
+
+    public partial class Doberman : DobermanPage 
+    {
+        public Doberman()
+            : base()
+        {
+           Configuration.AddMongoConnectionString("mongodb://localhost");
+        }
+    }
+    
+#### Notice
+
+In order to run the Mongo connection check your website must reference the [official Mongo DB C# Driver] (https://github.com/mongodb/mongo-csharp-driver). Currently uses version **1.3.1.4349**.
