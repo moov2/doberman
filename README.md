@@ -156,3 +156,28 @@ Alternatively you can specify your own in the constructor of your DobermanContro
 #### Notice
 
 In order to run the Mongo connection check your website must reference the [official Mongo DB C# Driver] (https://github.com/mongodb/mongo-csharp-driver). Currently uses version **1.3.1.4349**.
+
+### File Saving
+
+Checks to see if a file can be saved to a directory, perfect for changing you got your file permissions working properly. If the file can be saved then the check is deemed a pass, if it can't be saved then the check is a failure. File saving is the only check that requires some additional code to get it to work. Using the Configuration object you can supply as many directories as you want to save to using the _AddDirectorySave_ method, as shown below.
+
+#### MVC
+    
+    public class DobermanController : BaseDobermanController
+    {
+        public DobermanController() : base()
+        {
+            Configuration.AddDirectorySave("/My/Upload/Directory/");
+        }
+    }
+    
+#### Web Forms
+
+    public partial class Doberman : DobermanPage 
+    {
+        public Doberman()
+            : base()
+        {
+           Configuration.AddDirectorySave("/My/Upload/Directory/");
+        }
+    }
