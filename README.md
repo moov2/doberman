@@ -6,11 +6,11 @@ Doberman is a C# library capable of performing checks on your .NET website.
 
 Currently Doberman is capable of performing the checks listed below.
 
-* Page loading
-* SQL Database Connection
-* Mongo DB Connection
-* Saving of file
-* Email sending
+* Page Loading
+* SQL Database Connecting
+* Mongo DB Connecting
+* File Saving
+* Email Sending
 
 ## Getting Started
 
@@ -85,4 +85,37 @@ Check if a web page loads, if it loads then the test passes, otherwise it is dee
         }
     }
 
+### SQL Database Connecting
 
+Check if we can establish a connection to a SQL database, if we can then the check passes otherwise it is determined as a failure. Doberman will automatically try and find a SQL connection string in your Web.config that has the name that is equal to your computer name, like below.
+
+    <configuration>
+        <connectionStrings>
+            <add name="MY-PC"
+                 connectionString="Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase"
+                 providerName="System.Data.SqlClient" />
+        </connectionStrings>
+    </configuration>
+
+Alternatively you can specify your own in the constructor of your DobermanController or DobermanPage using the Configuration object shown below.
+
+#### MVC
+
+    public class DobermanController : BaseDobermanController
+    {
+        public DobermanController() : base()
+        {
+            Configuration.AddSqlConnectionString(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
+        }
+    }
+
+#### Web Forms
+
+    public partial class Doberman : DobermanPage 
+    {
+        public Doberman()
+            : base()
+        {
+            Configuration.AddSqlConnectionString(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
+        }
+    }
