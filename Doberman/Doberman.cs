@@ -9,6 +9,11 @@ namespace Doberman
     public class Doberman
     {
         /// <summary>
+        /// Current version of Doberman.
+        /// </summary>
+        public const string Version = "v0.1";
+
+        /// <summary>
         /// Fetches a list of ICheck that can be passed to the Run method. The list is
         /// dictated by the configuration that is passed in.
         /// </summary>

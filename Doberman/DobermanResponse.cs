@@ -19,13 +19,14 @@ namespace Doberman
             response.Write("\t<title>Doberman Status</title>\n\n");
             response.Write("\t<style type='text/css'>\n");
             response.Write("\tbody { color: #626262; font-size: 1em; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding; 0; width: 100%; }\n");
-            response.Write("\theader { background-color: #535353; border-bottom: 1px solid #858585; height: 45px; line-height: 45px; margin: 0; padding; 0; }\n");
+            response.Write("\theader { background-color: #535353; color: #f3f3f3; border-bottom: 1px solid #858585; height: 45px; line-height: 45px; margin: 0; padding; 0; }\n");
             response.Write("\theader a { color: #f3f3f3; text-decoration: none; }\n");
             response.Write("\theader a:hover { color: #f3f3f3; text-decoration: none; }\n");
             response.Write("\theader a:visited { color: #f3f3f3; text-decoration: none; }\n");
             response.Write("\theader a:link { color: #f3f3f3; text-decoration: none; }\n");
             response.Write("\theader a { color: #f3f3f3; }\n");
-            response.Write("\theader h1 { color: #f3f3f3; cursor: pointer; font-size: 1em; margin: 0 0 0 50px; }\n");
+            response.Write("\theader h1 { cursor: pointer; float: left; font-size: 1em; margin: 0 0 0 50px; }\n");
+            response.Write("\theader h2 { float: right; font-size: 1em; margin: 0 50px 0 0; }\n");
             response.Write("\t#header-status { color: #fff; font-size: 4.5em; font-weight: 400; height: 160px; line-height: 160px; padding: 0 0 0 50px; }\n");
             response.Write("\t#header-status.ok { background-color: #00be29; }\n");
             response.Write("\t#header-status.not-ok { background-color: #d60e0e; }\n");
@@ -41,6 +42,7 @@ namespace Doberman
             response.Write("<body>\n\n");
             response.Write("\t<header>\n");
             response.Write("\t\t<h1><a href='http://github.com/moov2/doberman'>Doberman</a></h1>\n");
+            response.Write("\t\t<h2>" + Doberman.Version + "</h2>\n");
             response.Write("\t</header>\n\n");
 
             if (failCount == 0)
