@@ -1,6 +1,7 @@
 ﻿using System;
 using Doberman.Services;
 using System.Collections.Generic;
+using Doberman.Model;
 
 namespace Doberman.Configuration
 {
@@ -9,7 +10,10 @@ namespace Doberman.Configuration
         /// <summary>
         /// Flag indicating whether a check should be done for sending an email.
         /// </summary>
-        public bool CheckSendingEmail { get; private set; }
+        public bool CheckSendingEmail
+        {
+            get { return EmailSettings != null && HasSmtpMailSettings; }
+        }
 
         /// <summary>
         /// Flag indicating there are any directories to be saved too.
@@ -36,6 +40,15 @@ namespace Doberman.Configuration
         }
 
         /// <summary>
+        /// Flag indicating if there are Smtp mail settings defined in the
+        /// web configuration file.
+        /// </summary>
+        public bool HasSmtpMailSettings
+        {
+            get; private set;
+        }
+
+        /// <summary>
         /// Flag indicating whether there are any SQL connection strings.
         /// </summary>
         public bool HasSqlConnectionStrings
@@ -52,6 +65,11 @@ namespace Doberman.Configuration
         /// Used to send the dummy email.
         /// </summary>
         public IEmailProvider EmailProvider { get; private set; }
+
+        /// <summary>
+        /// Data to be used for the email check.
+        /// </summary>
+        public EmailCheckSettings EmailSettings { get; private set; }
 
         /// <summary>
         /// List of pages to perform load tests on.
@@ -82,7 +100,7 @@ namespace Doberman.Configuration
         {
             AddMongoConnectionString(configurationProvider.GetMongoConnectionString());
             AddSqlConnectionString(configurationProvider.GetSqlConnectionString());
-            CheckSendingEmail = configurationProvider.HasSmtpMailSettings();
+            HasSmtpMailSettings = configurationProvider.HasSmtpMailSettings();
         }
 
         /// <summary>
@@ -161,9 +179,9 @@ namespace Doberman.Configuration
         /// Enables the checking that an email can be sent.
         /// </summary>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration EnableEmailCheck()
+        public DobermanConfiguration EnableEmailCheck(string from, string to)
         {
-            CheckSendingEmail = true;
+            EmailSettings = new EmailCheckSettings { From = from, To = to };
             return this;
         }
     }

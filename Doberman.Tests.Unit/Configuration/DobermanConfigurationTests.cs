@@ -222,12 +222,30 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that when EnableEmailCheck is called, the CheckSendingEmail flag is set to true.
+        /// Tests that when EnableEmailCheck is called when the web configuration has smtp mail settings,
+        /// the CheckSendingEmail flag is set to true.
         /// </summary>
         [Test]
-        public void EnableEmailCheck_SetsCheckSendingEmailToTrue()
+        public void EnableEmailCheck_WhenConfigurationHasSmtpMailSettings_SetsCheckSendingEmailToTrue()
         {
-            Assert.That(new DobermanConfiguration().EnableEmailCheck().CheckSendingEmail, Is.True);
+            var configurationProvider = new Mock<IConfigurationProvider>();
+            configurationProvider.Setup(x => x.HasSmtpMailSettings()).Returns(true);
+
+            Assert.That(new DobermanConfiguration(configurationProvider.Object).EnableEmailCheck("from@email.com", "to@email.com").CheckSendingEmail, Is.True);
+        }
+
+        /// <summary>
+        /// Tests that when the web configuration doesn't have smtp mail settings and EnableEmailCheck 
+        /// is called, the CheckSendingEmail flag stays as false because the check can't be run if there are
+        /// no SMTP settings.
+        /// </summary>
+        [Test]
+        public void EnableEmailCheck_WhenConfigurationDoesntHaveSmtpMailSettings_KeepsCheckSendingEmailAsFalse()
+        {
+            var configurationProvider = new Mock<IConfigurationProvider>();
+            configurationProvider.Setup(x => x.HasSmtpMailSettings()).Returns(false);
+
+            Assert.That(new DobermanConfiguration(configurationProvider.Object).EnableEmailCheck("from@email.com", "to@email.com").CheckSendingEmail, Is.False);
         }
 
         /// <summary>
@@ -260,12 +278,12 @@ namespace Doberman.Tests.Unit.Configuration
         /// settings in the config, will set CheckSendingEmail to true.
         /// </summary>
         [Test]
-        public void ConstructWithConfigurationProvider_HasMailSettings_SetsCheckSendingEmailToTrue()
+        public void ConstructWithConfigurationProvider_HasMailSettings_SetsHasSmtpMailSettingsToTrue()
         {
             var configurationProvider = new Mock<IConfigurationProvider>();
             configurationProvider.Setup(x => x.HasSmtpMailSettings()).Returns(true);
 
-            Assert.That(new DobermanConfiguration(configurationProvider.Object).CheckSendingEmail, Is.True);
+            Assert.That(new DobermanConfiguration(configurationProvider.Object).HasSmtpMailSettings, Is.True);
         }
 
         /// <summary>

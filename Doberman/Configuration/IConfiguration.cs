@@ -1,6 +1,7 @@
 ﻿using System;
 using Doberman.Services;
 using System.Collections.Generic;
+using Doberman.Model;
 
 namespace Doberman.Configuration
 {
@@ -14,6 +15,7 @@ namespace Doberman.Configuration
         bool CheckSendingEmail { get; }
 
         IEmailProvider EmailProvider { get; }
+        EmailCheckSettings EmailSettings { get; }
 
         IList<string> Directories { get; }
         IList<string> MongoConnectionStrings { get; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Doberman.Model;
 using System.Net;
+using System.Web;
 
 namespace Doberman.Checks
 {

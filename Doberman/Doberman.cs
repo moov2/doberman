@@ -51,7 +51,7 @@ namespace Doberman
             }
 
             if (configuration.CheckSendingEmail)
-                checks.Add(new SendingEmailCheck(configuration.EmailProvider));
+                checks.Add(new SendingEmailCheck(configuration.EmailSettings, configuration.EmailProvider));
 
             return checks;
         }
