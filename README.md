@@ -20,16 +20,16 @@ Firstly download the latest Doberman dll from the [downloads] (https://github.co
 
 Create a new empty controller (recommend calling it 'DobermanController.cs') that should extend BaseDobermanController instead of the default Controller, so you have something resembling the code below.
 
-  using System;
-  using Doberman.Mvc;
+    using System;
+    using Doberman.Mvc;
   
-  namespace VoucherGod.Controllers
-  {
-      public class DobermanController : BaseDobermanController
-      {
-  
-      }
-  }
+    namespace VoucherGod.Controllers
+    {
+        public class DobermanController : BaseDobermanController
+        {
+    
+        }
+    }
 
 You should now at least get a page load check that is checking the root page of your website.
 
@@ -37,20 +37,20 @@ You should now at least get a page load check that is checking the root page of 
 
 Create a new web form (recommend calling it 'Doberman.aspx'). You can delete all the HTML that is created and just be left with the code below.
 
-  <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Doberman.aspx.cs" Inherits="ExampleWebsite.Doberman" %>
+    <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Doberman.aspx.cs" Inherits="ExampleWebsite.Doberman" %>
 
 Then if you go into the code behind file and make your class extend 'DobermanPage' instead of 'System.Web.UI.Page' you should hopefully be left with something looking like the code below.
 
-  using System;
-  using Doberman.WebForms;
-  
-  namespace Remoting
-  {
-      public partial class Doberman : DobermanPage 
-      {
-  
-      }
-  }
+    using System;
+    using Doberman.WebForms;
+    
+    namespace Remoting
+    {
+        public partial class Doberman : DobermanPage 
+        {
+    
+        }
+    }
 
 You should now at least get a page load check that is checking the root page of your website.
 
