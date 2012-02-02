@@ -181,3 +181,41 @@ Checks to see if a file can be saved to a directory, perfect for changing you go
            Configuration.AddDirectorySave("/My/Upload/Directory/");
         }
     }
+    
+### Email Sending
+
+Checks to see if an email can be sent, if the email can be sent then the check is passed, otherwise it is a failure. Doberman will check the _mailSettings_ in the Web.config, if they are present then all that is required is a from email address & to email address then the check can be run. Without both of these the email check won't run.
+
+Here is what should be in the Web.config of your website.
+
+    <configuration>
+        <system.net>
+            <mailSettings>
+                <smtp>
+                    <network host="localhost" port="25" />
+                </smtp>
+            </mailSettings>
+        </system.net>
+    </configuration>
+    
+Then the from & to address should be given to the configuration as shown below.
+
+#### MVC
+
+    public class DobermanController : BaseDobermanController
+    {
+        public DobermanController() : base()
+        {
+            Configuration.EnableEmailCheck("from.email@address.com", "to.email@address.com");
+        }
+    }
+
+#### Web Forms
+
+    public partial class Doberman : DobermanPage 
+    {
+        public DobermanController() : base()
+        {
+            Configuration.EnableEmailCheck("from.email@address.com", "to.email@address.com");
+        }
+    }
