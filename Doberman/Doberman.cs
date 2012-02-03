@@ -50,8 +50,11 @@ namespace Doberman
                     checks.Add(new ConnectToMongoCheck(mongoConnectionString));
             }
 
-            if (configuration.CheckSendingEmail)
-                checks.Add(new SendingEmailCheck(configuration.EmailSettings, configuration.EmailProvider));
+            if (configuration.HasSmtpSettings)
+            {
+                foreach (var smtpSettings in configuration.SmtpSettings)
+                    checks.Add(new SendingEmailCheck(smtpSettings));
+            }
 
             return checks;
         }

@@ -63,14 +63,12 @@
     <Compile Include="Checks\PageLoadsCheck.cs" />
     <Compile Include="DobermanResponse.cs" />
     <Compile Include="Model\DobermanResult.cs" />
-    <Compile Include="Model\EmailCheckSettings.cs" />
+    <Compile Include="Model\SmtpSettings.cs" />
     <Compile Include="Mvc\BaseDobermanController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Doberman.cs" />
     <Compile Include="Services\ConfigurationProvider.cs" />
-    <Compile Include="Services\DobermanEmailProvider.cs" />
     <Compile Include="Services\IConfigurationProvider.cs" />
-    <Compile Include="Services\IEmailProvider.cs" />
     <Compile Include="WebForms\DobermanPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

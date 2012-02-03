@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Configuration;
 using System.Configuration;
+using Doberman.Model;
 
 namespace Doberman.Services
 {
@@ -31,12 +32,17 @@ namespace Doberman.Services
         }
 
         /// <summary>
-        /// Returns flag indicating whether a host is specified in the mail settings in the application configuration.
+        /// Retrieves the Smtp settings from the configuration file.
         /// </summary>
-        /// <returns>True if the configuration has mail settings, otheriwse false.</returns>
-        public bool HasSmtpMailSettings()
+        /// <returns>Host & Port of the smtp network if exists in configuration file, otherwise false.</returns>
+        public SmtpSettings GetSmtpMailSettings()
         {
-            return !String.IsNullOrEmpty((ConfigurationManager.GetSection("system.net/mailSettings/smtp") as SmtpSection).Network.Host);
+            var network = (ConfigurationManager.GetSection("system.net/mailSettings/smtp") as SmtpSection).Network;
+
+            if (network == null)
+                return null;
+
+            return new SmtpSettings { Host = network.Host, Port = network.Port, Ssl = network.EnableSsl };
         }
     }
 }

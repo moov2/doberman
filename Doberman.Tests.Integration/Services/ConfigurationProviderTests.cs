@@ -21,9 +21,13 @@ namespace Doberman.Tests.Integration.Services
         /// Tests that GetMailSettings is able to retrieve the network host from the mail settings in the config.
         /// </summary>
         [Test]
-        public void HasSmtpMailSettings_MailSettingsInConfig_ReturnsTrue()
+        public void GetSmtpMailSettings_MailSettingsInConfig_ReturnsTrue()
         {
-            Assert.That(new ConfigurationProvider().HasSmtpMailSettings(), Is.True);
+            var smtpSettings = new ConfigurationProvider().GetSmtpMailSettings();
+
+            Assert.That(smtpSettings.Host, Is.EqualTo("localhost"));
+            Assert.That(smtpSettings.Port, Is.EqualTo(25));
+            Assert.That(smtpSettings.Ssl, Is.True);
         }
 
         /// <summary>

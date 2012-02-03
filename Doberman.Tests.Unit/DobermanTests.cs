@@ -173,50 +173,6 @@ namespace Doberman.Tests.Unit
         }
 
         /// <summary>
-        /// Tests that the collection returned from Fetch contains a SendingEmailCheck in the collection of checks, when
-        /// the configuration passed to Fetch has CheckSendingEmail as true.
-        /// </summary>
-        [Test]
-        public void Fetch_ConfigurationHasCheckSendingEmailAsTrue_ReturnsContainsSendingEmailCheck()
-        {
-            var configuration = _autoMoqer.GetMock<IConfiguration>();
-            configuration.Setup(x => x.CheckSendingEmail).Returns(true);
-
-            Assert.That(GetCountOfInstanceFromFetch<SendingEmailCheck>(configuration.Object), Is.EqualTo(1));
-        }
-
-        /// <summary>
-        /// Tests that the collection returned from Fetch doesn't contain a SavingFileCheck in the collection of
-        /// checks, when the configuration passed to Fetch has CheckSendingEmail as false.
-        /// </summary>
-        [Test]
-        public void Fetch_ConfigurationHasCheckSendingEmailAsFalse_ReturnsDoesntContainSendingEmailCheck()
-        {
-            var configuration = _autoMoqer.GetMock<IConfiguration>();
-            configuration.Setup(x => x.CheckSendingEmail).Returns(false);
-
-            Assert.That(GetCountOfInstanceFromFetch<SendingEmailCheck>(configuration.Object), Is.EqualTo(0));
-        }
-
-        /// <summary>
-        /// Tests that when the configuration given to Fetch has CheckSendingEmail as true, the SendingEmailCheck in the checks
-        /// returned has the same email provider value as the EmailProvider property in the configuration.
-        /// </summary>
-        [Test]
-        public void Fetch_ConfigurationHasCheckSendingEmailAsTrue_SendingEmailCheckHasEmailProviderFromConfiguration()
-        {
-            var expectedProvider = _autoMoqer.GetMock<IEmailProvider>().Object;
-
-            var configuration = _autoMoqer.GetMock<IConfiguration>();
-            configuration.Setup(x => x.CheckSendingEmail).Returns(true);
-            configuration.Setup(x => x.EmailProvider).Returns(expectedProvider);
-
-            var sendingEmailCheck = GetInstanceFromFetch<SendingEmailCheck>(configuration.Object)[0] as SendingEmailCheck;
-
-            Assert.That(sendingEmailCheck.EmailProvider, Is.EqualTo(expectedProvider));
-        }
-
-        /// <summary>
         /// Tests that the collection returned from Fetch contains a ConnectToSqlServerCheck in the collection 
         /// of checks, when the configuration passed to Fetch has sql connection strings.
         /// </summary>
@@ -306,6 +262,52 @@ namespace Doberman.Tests.Unit
             var connectToMongoCheck = GetInstanceFromFetch<ConnectToMongoCheck>(configuration.Object)[0] as ConnectToMongoCheck;
 
             Assert.That(connectToMongoCheck.ConnectionString, Is.EqualTo(expectedConnectionString));
+        }
+
+        /// <summary>
+        /// Tests that the collection returned from Fetch contains a SendingEmailCheck in the collection 
+        /// of checks, when the configuration passed to Fetch has smtp settings.
+        /// </summary>
+        [Test]
+        public void Fetch_ConfigurationHasSmtpSettings_ReturnsSameNumberOfSendingEmailCheckAsConfiguration()
+        {
+            var configuration = _autoMoqer.GetMock<IConfiguration>();
+            configuration.Setup(x => x.HasSmtpSettings).Returns(true);
+            configuration.Setup(x => x.SmtpSettings).Returns(new List<SmtpSettings>() { new SmtpSettings { Host = "mail.test.com", Port = 145 }, new SmtpSettings { Host = "mail.another.com", Port = 145 } });
+
+            Assert.That(GetCountOfInstanceFromFetch<SendingEmailCheck>(configuration.Object), Is.EqualTo(2));
+        }
+
+        /// <summary>
+        /// Tests that the collection returned from Fetch doesn't contain any sending email checks in the 
+        /// collection of checks, when the configuration passed to Fetch has no smtp settings.
+        /// </summary>
+        [Test]
+        public void Fetch_ConfigurationHasNoSmtpSettings_ReturnsDoesntContainSendingEmailCheck()
+        {
+            var configuration = _autoMoqer.GetMock<IConfiguration>();
+            configuration.Setup(x => x.HasSmtpSettings).Returns(false);
+            configuration.Setup(x => x.SmtpSettings).Returns(new List<SmtpSettings>());
+
+            Assert.That(GetCountOfInstanceFromFetch<SendingEmailCheck>(configuration.Object), Is.EqualTo(0));
+        }
+
+        /// <summary>
+        /// Tests that when the configuration given to Fetch has a smtp setting, the SendingEmailCheck in 
+        /// the checks returned has the same smtp settings value as the property in the configuration.
+        /// </summary>
+        [Test]
+        public void Fetch_ConfigurationHasSmtpSettings_SendingEmailCheckHasSmtpSettingsFromConfiguration()
+        {
+            var expectedSmtpSetting = new SmtpSettings { Host = "mail.host.com", Port = 145 };
+
+            var configuration = _autoMoqer.GetMock<IConfiguration>();
+            configuration.Setup(x => x.HasSmtpSettings).Returns(true);
+            configuration.Setup(x => x.SmtpSettings).Returns(new List<SmtpSettings>() { expectedSmtpSetting });
+
+            var sendingEmailCheck = GetInstanceFromFetch<SendingEmailCheck>(configuration.Object)[0] as SendingEmailCheck;
+
+            Assert.That(sendingEmailCheck.SmtpSettings, Is.EqualTo(expectedSmtpSetting));
         }
 
         /// <summary>

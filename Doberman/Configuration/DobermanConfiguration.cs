@@ -8,14 +8,6 @@ namespace Doberman.Configuration
     public class DobermanConfiguration : IConfiguration
     {
         /// <summary>
-        /// Flag indicating whether a check should be done for sending an email.
-        /// </summary>
-        public bool CheckSendingEmail
-        {
-            get { return EmailSettings != null && HasSmtpMailSettings; }
-        }
-
-        /// <summary>
         /// Flag indicating there are any directories to be saved too.
         /// </summary>
         public bool HasDirectoriesToSave
@@ -40,12 +32,11 @@ namespace Doberman.Configuration
         }
 
         /// <summary>
-        /// Flag indicating if there are Smtp mail settings defined in the
-        /// web configuration file.
+        /// Flag indicating whether a check should be done for sending an email.
         /// </summary>
-        public bool HasSmtpMailSettings
+        public bool HasSmtpSettings
         {
-            get; private set;
+            get { return SmtpSettings.Count > 0; }
         }
 
         /// <summary>
@@ -62,14 +53,9 @@ namespace Doberman.Configuration
         public IList<string> Directories { get; private set; }
 
         /// <summary>
-        /// Used to send the dummy email.
+        /// List of Smtp network settings.
         /// </summary>
-        public IEmailProvider EmailProvider { get; private set; }
-
-        /// <summary>
-        /// Data to be used for the email check.
-        /// </summary>
-        public EmailCheckSettings EmailSettings { get; private set; }
+        public IList<SmtpSettings> SmtpSettings { get; private set; }
 
         /// <summary>
         /// List of pages to perform load tests on.
@@ -92,29 +78,14 @@ namespace Doberman.Configuration
             MongoConnectionStrings = new List<string>();
             Pages = new List<string>();
             SqlConnectionStrings = new List<string>();
-
-            EmailProvider = new DobermanEmailProvider();
+            SmtpSettings = new List<SmtpSettings>();
         }
 
         public DobermanConfiguration(IConfigurationProvider configurationProvider) : this()
         {
             AddMongoConnectionString(configurationProvider.GetMongoConnectionString());
+            AddSmtpServer(configurationProvider.GetSmtpMailSettings());
             AddSqlConnectionString(configurationProvider.GetSqlConnectionString());
-            HasSmtpMailSettings = configurationProvider.HasSmtpMailSettings();
-        }
-
-        /// <summary>
-        /// Sets the provider used to send an email.
-        /// </summary>
-        /// <param name="emailProvider">Provider used to send an email.</param>
-        /// <returns>Itself.</returns>
-        public DobermanConfiguration SetEmailProvider(IEmailProvider emailProvider)
-        {
-            if (emailProvider == null)
-                throw (new Exception("emailProvider must not be null."));
-
-            EmailProvider = emailProvider;
-            return this;
         }
 
         /// <summary>
@@ -176,12 +147,39 @@ namespace Doberman.Configuration
         }
 
         /// <summary>
+        /// Adds an SmtpSettings to the SmtpSettings collection.
+        /// </summary>
+        /// <param name="smtpSettings">Contains details about an Smtp server to check.</param>
+        /// <returns>Itself.</returns>
+        private DobermanConfiguration AddSmtpServer(SmtpSettings smtpSettings)
+        {
+            if (smtpSettings != null)
+                SmtpSettings.Add(smtpSettings);
+
+            return this;
+        }
+
+        /// <summary>
         /// Enables the checking that an email can be sent.
         /// </summary>
+        /// <param name="host">Network host of SMTP server.</param>
+        /// <param name="port">Port of the SMTP server.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration EnableEmailCheck(string from, string to)
+        public DobermanConfiguration AddSmtpServer(string host, int port)
         {
-            EmailSettings = new EmailCheckSettings { From = from, To = to };
+            return AddSmtpServer(host, port, false);
+        }
+
+        /// <summary>
+        /// Enables the checking that an email can be sent.
+        /// </summary>
+        /// <param name="host">Network host of SMTP server.</param>
+        /// <param name="port">Port of the SMTP server.</param>
+        /// <param name="enableSsl">Flag indicating whether to use ssl.</param>
+        /// <returns>Itself.</returns>
+        public DobermanConfiguration AddSmtpServer(string host, int port, bool enableSsl)
+        {
+            SmtpSettings.Add(new SmtpSettings { Host = host, Port = port, Ssl = enableSsl });
             return this;
         }
     }

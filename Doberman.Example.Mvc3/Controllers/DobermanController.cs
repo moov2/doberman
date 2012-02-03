@@ -13,7 +13,7 @@ namespace Doberman.Example.Mvc3.Controllers
     {
         public DobermanController() : base()
         {
-            Configuration.AddDirectorySave("Uploads");
+            Configuration.AddSmtpServer("smtp.gmail.com", 465, true);
         }
     }
 }

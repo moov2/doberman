@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Doberman.Configuration;
 using Moq;
 using Doberman.Services;
+using Doberman.Model;
 
 namespace Doberman.Tests.Unit.Configuration
 {
@@ -107,32 +108,21 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that by default the CheckSendingEmail is false.
+        /// Tests that by default the HasSmtpSettings is false.
         /// </summary>
         [Test]
-        public void Default_CheckSendingEmailIsFalse()
+        public void Default_HasSmtpSettingsIsFalse()
         {
-            Assert.That(new DobermanConfiguration().CheckSendingEmail, Is.False);
+            Assert.That(new DobermanConfiguration().HasSmtpSettings, Is.False);
         }
 
         /// <summary>
-        /// Tests when SetEmailProvider is given a provider, the EmailProvider is set.
+        /// Tests that by default SmtpSettings is empty.
         /// </summary>
         [Test]
-        public void SetEmailProvider_WithProvider_SetsEmailProvider()
+        public void Default_SmtpSettings_IsEmpty()
         {
-            var provider = new Mock<IEmailProvider>();
-            Assert.That(new DobermanConfiguration().SetEmailProvider(provider.Object).EmailProvider, Is.EqualTo(provider.Object));
-        }
-
-        /// <summary>
-        /// Tests when SetEmailProvider is given null, an exception is thrown.
-        /// </summary>
-        [Test]
-        public void SetEmailProvider_ProviderIsNull_Throws()
-        {
-            var configuration = new DobermanConfiguration();
-            Assert.Throws<Exception>(() => configuration.SetEmailProvider(null));
+            Assert.That(new DobermanConfiguration().SmtpSettings, Is.Empty);
         }
 
         /// <summary>
@@ -213,25 +203,16 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that by default the EmailProvider is an instance of DobermanEmailProvider.
-        /// </summary>
-        [Test]
-        public void Default_EmailProvider_InstanceOfDobermanEmailProvider()
-        {
-            Assert.That(new DobermanConfiguration().EmailProvider, Is.InstanceOf<DobermanEmailProvider>());
-        }
-
-        /// <summary>
         /// Tests that when EnableEmailCheck is called when the web configuration has smtp mail settings,
         /// the CheckSendingEmail flag is set to true.
         /// </summary>
         [Test]
-        public void EnableEmailCheck_WhenConfigurationHasSmtpMailSettings_SetsCheckSendingEmailToTrue()
+        public void Construct_ConfigurationHasSmtpSettings_AddsSmtpSetting()
         {
             var configurationProvider = new Mock<IConfigurationProvider>();
-            configurationProvider.Setup(x => x.HasSmtpMailSettings()).Returns(true);
+            configurationProvider.Setup(x => x.GetSmtpMailSettings()).Returns(new SmtpSettings { Host = "test.mailserver.com", Port = 434 });
 
-            Assert.That(new DobermanConfiguration(configurationProvider.Object).EnableEmailCheck("from@email.com", "to@email.com").CheckSendingEmail, Is.True);
+            Assert.That(new DobermanConfiguration(configurationProvider.Object).SmtpSettings.Count, Is.EqualTo(1));
         }
 
         /// <summary>
@@ -240,12 +221,12 @@ namespace Doberman.Tests.Unit.Configuration
         /// no SMTP settings.
         /// </summary>
         [Test]
-        public void EnableEmailCheck_WhenConfigurationDoesntHaveSmtpMailSettings_KeepsCheckSendingEmailAsFalse()
+        public void Construct_ConfigurationDoesntHaveSmtpSettings_SmtpSettingsIsEmpty()
         {
             var configurationProvider = new Mock<IConfigurationProvider>();
-            configurationProvider.Setup(x => x.HasSmtpMailSettings()).Returns(false);
+            configurationProvider.Setup(x => x.GetSmtpMailSettings()).Returns((SmtpSettings)null);
 
-            Assert.That(new DobermanConfiguration(configurationProvider.Object).EnableEmailCheck("from@email.com", "to@email.com").CheckSendingEmail, Is.False);
+            Assert.That(new DobermanConfiguration(configurationProvider.Object).SmtpSettings, Is.Empty);
         }
 
         /// <summary>
@@ -274,29 +255,6 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that constructing DobermanConfiguration with an instance of ConfigurationProvider that says there are mail
-        /// settings in the config, will set CheckSendingEmail to true.
-        /// </summary>
-        [Test]
-        public void ConstructWithConfigurationProvider_HasMailSettings_SetsHasSmtpMailSettingsToTrue()
-        {
-            var configurationProvider = new Mock<IConfigurationProvider>();
-            configurationProvider.Setup(x => x.HasSmtpMailSettings()).Returns(true);
-
-            Assert.That(new DobermanConfiguration(configurationProvider.Object).HasSmtpMailSettings, Is.True);
-        }
-
-        /// <summary>
-        /// Tests that constructing DobermanConfiguration with an instance of ConfigurationProvider that says there aren't 
-        /// any mailSettings in the config, will keep CheckSendingEmail to false.
-        /// </summary>
-        [Test]
-        public void ConstructWithConfigurationProvider_DoesntHaveMailSettings_SetsCheckSendingEmailToFalse()
-        {
-            Assert.That(new DobermanConfiguration(new Mock<IConfigurationProvider>().Object).CheckSendingEmail, Is.False);
-        }
-
-        /// <summary>
         /// Tests that constructing DobermanConfiguration with an instance of ConfigurationProvider that says there is a
         /// Mongo connection string in the application config should add said connection string to the MongoConnectionStrings
         /// list.
@@ -313,13 +271,60 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that constructing DobermanConfiguration with an instance of ConfigurationProvider that says there isn't a Mongo
-        /// connection string in the application config should keep MongoConnectionStrings list empty.
+        /// Tests that constructing DobermanConfiguration with an instance of ConfigurationProvider 
+        /// that says there isn't a Mongo connection string in the application config should keep 
+        /// MongoConnectionStrings list empty.
         /// </summary>
         [Test]
         public void ConstructWithConfigurationProvider_DoesntHaveMongoConnectionString_KeepsMongoConnectionStringsEmpty()
         {
             Assert.That(new DobermanConfiguration(new Mock<IConfigurationProvider>().Object).MongoConnectionStrings.Count, Is.EqualTo(0));
+        }
+
+        /// <summary>
+        /// Tests when AddSmtpServer is given valid host and port, the settings are added to the
+        /// SmtpSettings list.
+        /// </summary>
+        [Test]
+        public void AddSmtpServer_ValidHostAndPort_ShouldAddToSmtpSettings()
+        {
+            const string host = "mail.host.com";
+            const int port = 445;
+
+            var config = new DobermanConfiguration().AddSmtpServer(host, port);
+
+            Assert.That(config.SmtpSettings[0].Host, Is.EqualTo(host));
+            Assert.That(config.SmtpSettings[0].Port, Is.EqualTo(port));
+        }
+
+        /// <summary>
+        /// Tests when AddSmtpServer is not given the enableSsl parameter, it saves the SmtpSettings
+        /// as not using ssl.
+        /// </summary>
+        [Test]
+        public void AddSmtpServer_WithNoEnableSsl_ShouldSetSslToFalse()
+        {
+            const string host = "mail.host.com";
+            const int port = 445;
+
+            var config = new DobermanConfiguration().AddSmtpServer(host, port);
+
+            Assert.That(config.SmtpSettings[0].Ssl, Is.False);
+        }
+
+        /// <summary>
+        /// Tests when AddSmtpServer is given the enableSsl parameter, it saves the SmtpSettings
+        /// as the value of enableSsl
+        /// </summary>
+        [Test]
+        public void AddSmtpServer_WithEnableSsl_ShouldSetSslToTrue()
+        {
+            const string host = "mail.host.com";
+            const int port = 445;
+
+            var config = new DobermanConfiguration().AddSmtpServer(host, port, true);
+
+            Assert.That(config.SmtpSettings[0].Ssl, Is.True);
         }
     }
 }

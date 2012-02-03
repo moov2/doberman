@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Net.Configuration;
+using Doberman.Model;
 
 namespace Doberman.Services
 {
@@ -8,6 +9,6 @@ namespace Doberman.Services
     {
         string GetMongoConnectionString();
         string GetSqlConnectionString();
-        bool HasSmtpMailSettings();
+        SmtpSettings GetSmtpMailSettings();
     }
 }

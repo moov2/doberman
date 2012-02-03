@@ -78,6 +78,7 @@
     <Compile Include="Checks\SendingEmailCheckTests.cs" />
     <Compile Include="Configuration\DobermanConfigurationTests.cs" />
     <Compile Include="DobermanTests.cs" />
+    <Compile Include="Model\SmtpSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

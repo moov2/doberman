@@ -11,15 +11,12 @@ namespace Doberman.Configuration
         bool HasMongoConnectionStrings { get; }
         bool HasPagesToLoad { get; }
         bool HasSqlConnectionStrings { get; }
-
-        bool CheckSendingEmail { get; }
-
-        IEmailProvider EmailProvider { get; }
-        EmailCheckSettings EmailSettings { get; }
+        bool HasSmtpSettings { get; }
 
         IList<string> Directories { get; }
         IList<string> MongoConnectionStrings { get; }
         IList<string> Pages { get; }
         IList<string> SqlConnectionStrings { get; }
+        IList<SmtpSettings> SmtpSettings { get; }
     }
 }
