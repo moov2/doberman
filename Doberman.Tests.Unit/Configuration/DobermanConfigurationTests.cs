@@ -33,8 +33,12 @@ namespace Doberman.Tests.Unit.Configuration
         [Test]
         public void AddPageLoad_WithUrl_AddsUrlToPages()
         {
-            const string Url = "www.google.co.uk";
-            Assert.That(new DobermanConfiguration().AddPageLoad(Url).Pages.Contains(Url), Is.True);
+            const string url = "www.google.co.uk";
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddPageLoad(url);
+
+            Assert.That(dobermanConfiguration.Pages.Contains(url), Is.True);
         }
 
         /// <summary>
@@ -44,7 +48,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddPageLoad_SetsHasPagesToLoadToTrue()
         {
             const string Url = "www.google.co.uk";
-            Assert.That(new DobermanConfiguration().AddPageLoad(Url).HasPagesToLoad, Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddPageLoad(Url);
+
+            Assert.That(dobermanConfiguration.HasPagesToLoad, Is.True);
         }
 
         /// <summary>
@@ -54,7 +62,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddPageLoad_WithUri_SetsHasPagesToLoadToTrue()
         {
             Uri url = new Uri("http://www.google.co.uk/");
-            Assert.That(new DobermanConfiguration().AddPageLoad(url).HasPagesToLoad, Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddPageLoad(url);
+
+            Assert.That(dobermanConfiguration.HasPagesToLoad, Is.True);
         }
 
         /// <summary>
@@ -66,7 +78,10 @@ namespace Doberman.Tests.Unit.Configuration
             Uri url = new Uri("http://www.google.co.uk/testing/a/page/");
             const string expectedUrl = "http://www.google.co.uk";
 
-            Assert.That(new DobermanConfiguration().AddPageLoad(url).Pages.Contains(expectedUrl), Is.True);
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddPageLoad(url);
+
+            Assert.That(dobermanConfiguration.Pages.Contains(expectedUrl), Is.True);
         }
 
         /// <summary>
@@ -94,7 +109,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddDirectorySave_WithDirectory_AddsToDirectories()
         {
             const string directory = "diretory/to/save/to";
-            Assert.That(new DobermanConfiguration().AddDirectorySave(directory).Directories.Contains(directory), Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddDirectorySave(directory);
+
+            Assert.That(dobermanConfiguration.Directories.Contains(directory), Is.True);
         }
 
         /// <summary>
@@ -104,7 +123,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddDirectorySave_WithDirectory_SetsHasDirectoriesToSaveToTrue()
         {
             const string directory = "diretory/to/save/to";
-            Assert.That(new DobermanConfiguration().AddDirectorySave(directory).HasDirectoriesToSave, Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddDirectorySave(directory);
+
+            Assert.That(dobermanConfiguration.HasDirectoriesToSave, Is.True);
         }
 
         /// <summary>
@@ -150,7 +173,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddSqlConnectionString_WithConnectionString_HasSqlConnectionStringsToTrue()
         {
             var connectionString = @"Data Source=.\SQLEXPRESS;Integrated Security=True;database=DobermanTest";
-            Assert.That(new DobermanConfiguration().AddSqlConnectionString(connectionString).HasSqlConnectionStrings, Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddSqlConnectionString(connectionString);
+
+            Assert.That(dobermanConfiguration.HasSqlConnectionStrings, Is.True);
         }
 
         /// <summary>
@@ -161,7 +188,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddSqlConnectionString_WithConnectionString_SetsSqlServerConnectionString()
         {
             var connectionString = @"Data Source=.\SQLEXPRESS;Integrated Security=True;database=DobermanTest";
-            Assert.That(new DobermanConfiguration().AddSqlConnectionString(connectionString).SqlConnectionStrings.Contains(connectionString), Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddSqlConnectionString(connectionString);
+
+            Assert.That(dobermanConfiguration.SqlConnectionStrings.Contains(connectionString), Is.True);
         }
 
         /// <summary>
@@ -189,7 +220,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddMongoConnectionString_WithConnectionString_HasMongoConnectionStringsToTrue()
         {
             var connectionString = @"mongodb://localhost/doberman-test";
-            Assert.That(new DobermanConfiguration().AddMongoConnectionString(connectionString).HasMongoConnectionStrings, Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddMongoConnectionString(connectionString);
+
+            Assert.That(dobermanConfiguration.HasMongoConnectionStrings, Is.True);
         }
 
         /// <summary>
@@ -199,7 +234,11 @@ namespace Doberman.Tests.Unit.Configuration
         public void AddMongoConnectionString_WithConnectionString_AddsConnectionStringToMongoConnectionStrings()
         {
             var connectionString = @"mongodb://localhost/doberman-test";
-            Assert.That(new DobermanConfiguration().AddMongoConnectionString(connectionString).MongoConnectionStrings.Contains(connectionString), Is.True);
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddMongoConnectionString(connectionString);
+
+            Assert.That(dobermanConfiguration.MongoConnectionStrings.Contains(connectionString), Is.True);
         }
 
         /// <summary>
@@ -291,10 +330,11 @@ namespace Doberman.Tests.Unit.Configuration
             const string host = "mail.host.com";
             const int port = 445;
 
-            var config = new DobermanConfiguration().AddSmtpServer(host, port);
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddSmtpServer(host, port);
 
-            Assert.That(config.SmtpSettings[0].Host, Is.EqualTo(host));
-            Assert.That(config.SmtpSettings[0].Port, Is.EqualTo(port));
+            Assert.That(dobermanConfiguration.SmtpSettings[0].Host, Is.EqualTo(host));
+            Assert.That(dobermanConfiguration.SmtpSettings[0].Port, Is.EqualTo(port));
         }
 
         /// <summary>
@@ -307,9 +347,10 @@ namespace Doberman.Tests.Unit.Configuration
             const string host = "mail.host.com";
             const int port = 445;
 
-            var config = new DobermanConfiguration().AddSmtpServer(host, port);
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddSmtpServer(host, port);
 
-            Assert.That(config.SmtpSettings[0].Ssl, Is.False);
+            Assert.That(dobermanConfiguration.SmtpSettings[0].Ssl, Is.False);
         }
 
         /// <summary>
@@ -322,9 +363,10 @@ namespace Doberman.Tests.Unit.Configuration
             const string host = "mail.host.com";
             const int port = 445;
 
-            var config = new DobermanConfiguration().AddSmtpServer(host, port, true);
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.AddSmtpServer(host, port, true);
 
-            Assert.That(config.SmtpSettings[0].Ssl, Is.True);
+            Assert.That(dobermanConfiguration.SmtpSettings[0].Ssl, Is.True);
         }
     }
 }

@@ -5,7 +5,7 @@ using Doberman.Model;
 
 namespace Doberman.Configuration
 {
-    public class DobermanConfiguration : IConfiguration
+    public class DobermanConfiguration : IConfiguration, IDobermanConfigurator
     {
         /// <summary>
         /// Flag indicating there are any directories to be saved too.
@@ -93,7 +93,7 @@ namespace Doberman.Configuration
         /// </summary>
         /// <param name="directory">Directory path to be saved too.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddDirectorySave(string directory)
+        public IDobermanConfigurator AddDirectorySave(string directory)
         {
             Directories.Add(directory);
             return this;
@@ -104,7 +104,7 @@ namespace Doberman.Configuration
         /// </summary>
         /// <param name="url">URL to a web page.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddPageLoad(string url)
+        public IDobermanConfigurator AddPageLoad(string url)
         {
             Pages.Add(url);
             return this;
@@ -115,7 +115,7 @@ namespace Doberman.Configuration
         /// </summary>
         /// <param name="url">URL to a web page.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddPageLoad(Uri url)
+        public IDobermanConfigurator AddPageLoad(Uri url)
         {
             return AddPageLoad(url.Scheme + "://" + url.Authority);
         }
@@ -125,7 +125,7 @@ namespace Doberman.Configuration
         /// </summary>
         /// <param name="connectionString">Connection string.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddSqlConnectionString(string connectionString)
+        public IDobermanConfigurator AddSqlConnectionString(string connectionString)
         {
             if (!String.IsNullOrEmpty(connectionString))
                 SqlConnectionStrings.Add(connectionString);
@@ -138,7 +138,7 @@ namespace Doberman.Configuration
         /// </summary>
         /// <param name="connectionString">Connection string for the database.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddMongoConnectionString(string connectionString)
+        public IDobermanConfigurator AddMongoConnectionString(string connectionString)
         {
             if (!String.IsNullOrEmpty(connectionString))
                 MongoConnectionStrings.Add(connectionString);
@@ -165,7 +165,7 @@ namespace Doberman.Configuration
         /// <param name="host">Network host of SMTP server.</param>
         /// <param name="port">Port of the SMTP server.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddSmtpServer(string host, int port)
+        public IDobermanConfigurator AddSmtpServer(string host, int port)
         {
             return AddSmtpServer(host, port, false);
         }
@@ -177,10 +177,20 @@ namespace Doberman.Configuration
         /// <param name="port">Port of the SMTP server.</param>
         /// <param name="enableSsl">Flag indicating whether to use ssl.</param>
         /// <returns>Itself.</returns>
-        public DobermanConfiguration AddSmtpServer(string host, int port, bool enableSsl)
+        public IDobermanConfigurator AddSmtpServer(string host, int port, bool enableSsl)
         {
             SmtpSettings.Add(new SmtpSettings { Host = host, Port = port, Ssl = enableSsl });
             return this;
         }
+    }
+
+    public interface IDobermanConfigurator
+    {
+        IDobermanConfigurator AddDirectorySave(string directory);
+        IDobermanConfigurator AddMongoConnectionString(string connectionString);
+        IDobermanConfigurator AddPageLoad(string url);
+        IDobermanConfigurator AddSmtpServer(string host, int port);
+        IDobermanConfigurator AddSmtpServer(string host, int port, bool enableSsl);
+        IDobermanConfigurator AddSqlConnectionString(string connectionString);
     }
 }
