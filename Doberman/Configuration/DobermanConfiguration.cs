@@ -189,6 +189,7 @@ namespace Doberman.Configuration
         IDobermanConfigurator AddDirectorySave(string directory);
         IDobermanConfigurator AddMongoConnectionString(string connectionString);
         IDobermanConfigurator AddPageLoad(string url);
+        IDobermanConfigurator AddPageLoad(Uri url);
         IDobermanConfigurator AddSmtpServer(string host, int port);
         IDobermanConfigurator AddSmtpServer(string host, int port, bool enableSsl);
         IDobermanConfigurator AddSqlConnectionString(string connectionString);

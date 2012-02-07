@@ -11,25 +11,19 @@ namespace Doberman.WebForms
     {
         public Repeater DobermanResultsRepeater;
 
-        public DobermanConfiguration Configuration { get; private set; }
+        public IDobermanConfigurator Configuration { get; private set; }
 
         public DobermanPage()
-            : this(new DobermanConfiguration(new ConfigurationProvider()))
         {
-        }
-
-        public DobermanPage(DobermanConfiguration configuration)
-        {
-            Configuration = configuration;
+            Configuration = new DobermanConfiguration(new ConfigurationProvider());
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Configuration.HasPagesToLoad)
-                Configuration.AddPageLoad(HttpContext.Current.Request.Url);
+            Configuration.AddPageLoad(HttpContext.Current.Request.Url);
 
             var doberman = new Doberman();
-            var result = doberman.Run(doberman.Fetch(Configuration));
+            var result = doberman.Run(doberman.Fetch((DobermanConfiguration)Configuration));
 
             DobermanResponse.Output(Context, result);
         }
