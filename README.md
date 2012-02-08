@@ -56,7 +56,7 @@ You should now at least get a page load check that is checking the root page of 
 
 ## The Checks
 
-Doberman is capable of performing the variety of tests that are explained below. Some of the checks are performed magically by examining the Web.config for the website, however you can specify your own in the class that extends the Doberman MVC or Webforms class. The BaseDobermanController and DobermanPage have a Configuration property that has methods to allow you to customise your check.
+Doberman is capable of performing the variety of tests that are explained below. Some of the checks are performed magically by examining the Web.config for the website, however you can specify your own in the class that extends the Doberman MVC or Webforms class. The BaseDobermanController and DobermanPage have a Configuration property that has methods to allow you to customise your check. When calling the methods on the _Configuration_ object you are not overriding any previous calls, Doberman just adds multiple checks, so for example calling _CheckPageLoad_ multiple times will add multiple page load checks, they do not overwrite each other.
 
 ### Page Loading
 
@@ -70,7 +70,7 @@ Check if a web page loads, if it loads then the test passes, otherwise it is dee
         public DobermanController()
             : base()
         {
-            Configuration.AddPageLoad("http://my-website.com/My/Custom/Page");
+            Configuration.CheckPageLoad("http://my-website.com/My/Custom/Page");
         }
     }
 
@@ -81,7 +81,7 @@ Check if a web page loads, if it loads then the test passes, otherwise it is dee
         public Doberman()
             : base()
         {
-            Configuration.AddPageLoad("http://my-website.com/My/Custom/Page");
+            Configuration.CheckPageLoad("http://my-website.com/My/Custom/Page");
         }
     }
 
@@ -105,7 +105,7 @@ Alternatively you can specify your own in the constructor of your DobermanContro
     {
         public DobermanController() : base()
         {
-            Configuration.AddSqlConnectionString(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
+            Configuration.CheckSql(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
         }
     }
 
@@ -116,13 +116,13 @@ Alternatively you can specify your own in the constructor of your DobermanContro
         public Doberman()
             : base()
         {
-            Configuration.AddSqlConnectionString(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
+            Configuration.CheckSql(@"Data Source=.\SQLEXPRESS;Integrated Security=True;database=MyDatabase");
         }
     }
     
 ### Mongo DB Connecting
 
-Checks to see if a connection can be established with a Mongo server, if one can be established then the check is passed, otherwise it fails. Doberman will automatically run this check if there is an appSetting with the key of 'MongoServer' in the Web.config, like below.
+Checks to see if a connection can be established with a Mongo server, if one can be established then the check is passed, otherwise it fails. Doberman will automatically run this check if there is an appSetting with the key of '**MongoServer**' in the Web.config, like below.
 
     <configuration>
         <appSettings>
@@ -138,7 +138,7 @@ Alternatively you can specify your own in the constructor of your DobermanContro
     {
         public DobermanController() : base()
         {
-            Configuration.AddMongoConnectionString("mongodb://localhost");
+            Configuration.CheckMongo("mongodb://localhost");
         }
     }
 
@@ -149,7 +149,7 @@ Alternatively you can specify your own in the constructor of your DobermanContro
         public Doberman()
             : base()
         {
-           Configuration.AddMongoConnectionString("mongodb://localhost");
+           Configuration.CheckMongo("mongodb://localhost");
         }
     }
     
@@ -159,7 +159,7 @@ In order to run the Mongo connection check your website must reference the [offi
 
 ### File Saving
 
-Checks to see if a file can be saved to a directory, perfect for changing you got your file permissions working properly. If the file can be saved then the check is deemed a pass, if it can't be saved then the check is a failure. File saving is the only check that requires some additional code to get it to work. Using the Configuration object you can supply as many directories as you want to save to using the _AddDirectorySave_ method, as shown below.
+Checks to see if a file can be saved to a directory, perfect for changing you got your file permissions working properly. If the file can be saved then the check is deemed a pass, if it can't be saved then the check is a failure. File saving is the only check that requires some additional code to get it to work. Using the Configuration object you can supply as many directories as you want to save to using the _CheckFileSave_ method, as shown below.
 
 #### MVC
     
@@ -167,7 +167,7 @@ Checks to see if a file can be saved to a directory, perfect for changing you go
     {
         public DobermanController() : base()
         {
-            Configuration.AddDirectorySave("/My/Upload/Directory/");
+            Configuration.CheckFileSave("/My/Upload/Directory/");
         }
     }
     
@@ -178,13 +178,13 @@ Checks to see if a file can be saved to a directory, perfect for changing you go
         public Doberman()
             : base()
         {
-           Configuration.AddDirectorySave("/My/Upload/Directory/");
+           Configuration.CheckFileSave("/My/Upload/Directory/");
         }
     }
     
 ### Email Sending
 
-Checks to see if an email can be sent, if the email can be sent then the check is passed, otherwise it is a failure. Doberman will check the _mailSettings_ in the Web.config, if they are present then all that is required is a from email address & to email address then the check can be run. Without both of these the email check won't run.
+Checks to see if an email can be sent, if a connection can be established and a ready response is given from the SMTP server then the check is passed, otherwise it is deemed a failure. Doberman will check the _mailSettings_ in the Web.config, if they are present then a check is automatically performed.
 
 Here is what should be in the Web.config of your website.
 
@@ -198,7 +198,7 @@ Here is what should be in the Web.config of your website.
         </system.net>
     </configuration>
     
-Then the from & to address should be given to the configuration as shown below.
+Alternatively, just like the other checks you can add an email check in the constructor of your Controller / Page. Provide the network host and the port to the _CheckEmail_ method and a check will be added. You can also provide an additional property to specify that the SMTP uses SSL.
 
 #### MVC
 
@@ -206,7 +206,7 @@ Then the from & to address should be given to the configuration as shown below.
     {
         public DobermanController() : base()
         {
-            Configuration.EnableEmailCheck("from.email@address.com", "to.email@address.com");
+            Configuration.CheckEmail("localhost", 25, true);
         }
     }
 
@@ -216,6 +216,6 @@ Then the from & to address should be given to the configuration as shown below.
     {
         public DobermanController() : base()
         {
-            Configuration.EnableEmailCheck("from.email@address.com", "to.email@address.com");
+            Configuration.CheckEmail("localhost", 25, true);
         }
     }
