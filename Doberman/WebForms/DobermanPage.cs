@@ -20,7 +20,7 @@ namespace Doberman.WebForms
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Configuration.AddPageLoad(HttpContext.Current.Request.Url);
+            Configuration.CheckPageLoad(HttpContext.Current.Request.Url);
 
             var doberman = new Doberman();
             var result = doberman.Run(doberman.Fetch((DobermanConfiguration)Configuration));

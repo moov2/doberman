@@ -83,67 +83,9 @@ namespace Doberman.Configuration
 
         public DobermanConfiguration(IConfigurationProvider configurationProvider) : this()
         {
-            AddMongoConnectionString(configurationProvider.GetMongoConnectionString());
-            AddSmtpServer(configurationProvider.GetSmtpMailSettings());
-            AddSqlConnectionString(configurationProvider.GetSqlConnectionString());
-        }
-
-        /// <summary>
-        /// Adds a directory path to the Directories to be saved too.
-        /// </summary>
-        /// <param name="directory">Directory path to be saved too.</param>
-        /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddDirectorySave(string directory)
-        {
-            Directories.Add(directory);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a URL to the Pages to be loaded.
-        /// </summary>
-        /// <param name="url">URL to a web page.</param>
-        /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddPageLoad(string url)
-        {
-            Pages.Add(url);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a URL to the Pages to be loaded.
-        /// </summary>
-        /// <param name="url">URL to a web page.</param>
-        /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddPageLoad(Uri url)
-        {
-            return AddPageLoad(url.Scheme + "://" + url.Authority);
-        }
-
-        /// <summary>
-        /// Adds a connection string to be used to connect to a SQL database.
-        /// </summary>
-        /// <param name="connectionString">Connection string.</param>
-        /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddSqlConnectionString(string connectionString)
-        {
-            if (!String.IsNullOrEmpty(connectionString))
-                SqlConnectionStrings.Add(connectionString);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a MongoConnectionString to be used to attempt to connect to the database.
-        /// </summary>
-        /// <param name="connectionString">Connection string for the database.</param>
-        /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddMongoConnectionString(string connectionString)
-        {
-            if (!String.IsNullOrEmpty(connectionString))
-                MongoConnectionStrings.Add(connectionString);
-
-            return this;
+            CheckMongo(configurationProvider.GetMongoConnectionString());
+            CheckEmail(configurationProvider.GetSmtpMailSettings());
+            CheckSql(configurationProvider.GetSqlConnectionString());
         }
 
         /// <summary>
@@ -151,7 +93,7 @@ namespace Doberman.Configuration
         /// </summary>
         /// <param name="smtpSettings">Contains details about an Smtp server to check.</param>
         /// <returns>Itself.</returns>
-        private DobermanConfiguration AddSmtpServer(SmtpSettings smtpSettings)
+        private DobermanConfiguration CheckEmail(SmtpSettings smtpSettings)
         {
             if (smtpSettings != null)
                 SmtpSettings.Add(smtpSettings);
@@ -165,9 +107,9 @@ namespace Doberman.Configuration
         /// <param name="host">Network host of SMTP server.</param>
         /// <param name="port">Port of the SMTP server.</param>
         /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddSmtpServer(string host, int port)
+        public IDobermanConfigurator CheckEmail(string host, int port)
         {
-            return AddSmtpServer(host, port, false);
+            return CheckEmail(host, port, false);
         }
 
         /// <summary>
@@ -177,21 +119,78 @@ namespace Doberman.Configuration
         /// <param name="port">Port of the SMTP server.</param>
         /// <param name="enableSsl">Flag indicating whether to use ssl.</param>
         /// <returns>Itself.</returns>
-        public IDobermanConfigurator AddSmtpServer(string host, int port, bool enableSsl)
+        public IDobermanConfigurator CheckEmail(string host, int port, bool enableSsl)
         {
-            SmtpSettings.Add(new SmtpSettings { Host = host, Port = port, Ssl = enableSsl });
+            return CheckEmail(new SmtpSettings { Host = host, Port = port, Ssl = enableSsl });
+        }
+
+        /// <summary>
+        /// Adds a directory path to the Directories to be saved too.
+        /// </summary>
+        /// <param name="directory">Directory path to be saved too.</param>
+        /// <returns>Itself.</returns>
+        public IDobermanConfigurator CheckFileSave(string directory)
+        {
+            Directories.Add(directory);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a MongoConnectionString to be used to attempt to connect to the database.
+        /// </summary>
+        /// <param name="connectionString">Connection string for the database.</param>
+        /// <returns>Itself.</returns>
+        public IDobermanConfigurator CheckMongo(string connectionString)
+        {
+            if (!String.IsNullOrEmpty(connectionString))
+                MongoConnectionStrings.Add(connectionString);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a URL to the Pages to be loaded.
+        /// </summary>
+        /// <param name="url">URL to a web page.</param>
+        /// <returns>Itself.</returns>
+        public IDobermanConfigurator CheckPageLoad(string url)
+        {
+            Pages.Add(url);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a URL to the Pages to be loaded.
+        /// </summary>
+        /// <param name="url">URL to a web page.</param>
+        /// <returns>Itself.</returns>
+        public IDobermanConfigurator CheckPageLoad(Uri url)
+        {
+            return CheckPageLoad(url.Scheme + "://" + url.Authority);
+        }
+
+        /// <summary>
+        /// Adds a connection string to be used to connect to a SQL database.
+        /// </summary>
+        /// <param name="connectionString">Connection string.</param>
+        /// <returns>Itself.</returns>
+        public IDobermanConfigurator CheckSql(string connectionString)
+        {
+            if (!String.IsNullOrEmpty(connectionString))
+                SqlConnectionStrings.Add(connectionString);
+
             return this;
         }
     }
 
     public interface IDobermanConfigurator
     {
-        IDobermanConfigurator AddDirectorySave(string directory);
-        IDobermanConfigurator AddMongoConnectionString(string connectionString);
-        IDobermanConfigurator AddPageLoad(string url);
-        IDobermanConfigurator AddPageLoad(Uri url);
-        IDobermanConfigurator AddSmtpServer(string host, int port);
-        IDobermanConfigurator AddSmtpServer(string host, int port, bool enableSsl);
-        IDobermanConfigurator AddSqlConnectionString(string connectionString);
+        IDobermanConfigurator CheckEmail(string host, int port);
+        IDobermanConfigurator CheckEmail(string host, int port, bool enableSsl);
+        IDobermanConfigurator CheckFileSave(string directory);
+        IDobermanConfigurator CheckMongo(string connectionString);
+        IDobermanConfigurator CheckPageLoad(string url);
+        IDobermanConfigurator CheckPageLoad(Uri url);
+        IDobermanConfigurator CheckSql(string connectionString);
     }
 }

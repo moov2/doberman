@@ -17,7 +17,7 @@ namespace Doberman.Mvc
         [HttpGet]
         public void Index()
         {
-            Configuration.AddPageLoad(Request.Url);
+            Configuration.CheckPageLoad(Request.Url);
 
             var doberman = new Doberman();
             var result = doberman.Run(doberman.Fetch((DobermanConfiguration)Configuration));

@@ -31,12 +31,12 @@ namespace Doberman.Tests.Unit.Configuration
         /// Tests adding a page load with a string URL that URL is stored in the Pages list.
         /// </summary>
         [Test]
-        public void AddPageLoad_WithUrl_AddsUrlToPages()
+        public void CheckPageLoad_WithUrl_AddsUrlToPages()
         {
             const string url = "www.google.co.uk";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddPageLoad(url);
+            dobermanConfiguration.CheckPageLoad(url);
 
             Assert.That(dobermanConfiguration.Pages.Contains(url), Is.True);
         }
@@ -45,12 +45,12 @@ namespace Doberman.Tests.Unit.Configuration
         /// Tests that adding a page load sets HasPagesToLoad to true.
         /// </summary>
         [Test]
-        public void AddPageLoad_SetsHasPagesToLoadToTrue()
+        public void CheckPageLoad_SetsHasPagesToLoadToTrue()
         {
             const string Url = "www.google.co.uk";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddPageLoad(Url);
+            dobermanConfiguration.CheckPageLoad(Url);
 
             Assert.That(dobermanConfiguration.HasPagesToLoad, Is.True);
         }
@@ -59,12 +59,12 @@ namespace Doberman.Tests.Unit.Configuration
         /// Tests adding a page load with a Uri object, sets HasPagesToLoad to true.
         /// </summary>
         [Test]
-        public void AddPageLoad_WithUri_SetsHasPagesToLoadToTrue()
+        public void CheckPageLoad_WithUri_SetsHasPagesToLoadToTrue()
         {
             Uri url = new Uri("http://www.google.co.uk/");
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddPageLoad(url);
+            dobermanConfiguration.CheckPageLoad(url);
 
             Assert.That(dobermanConfiguration.HasPagesToLoad, Is.True);
         }
@@ -73,13 +73,13 @@ namespace Doberman.Tests.Unit.Configuration
         /// Tests adding a page load with Uri object, adds a URL created from properties on the URI to the Pages list.
         /// </summary>
         [Test]
-        public void AddPageLoad_WithUri_AddsUrlFromUriToPages()
+        public void CheckPageLoad_WithUri_AddsUrlFromUriToPages()
         {
             Uri url = new Uri("http://www.google.co.uk/testing/a/page/");
             const string expectedUrl = "http://www.google.co.uk";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddPageLoad(url);
+            dobermanConfiguration.CheckPageLoad(url);
 
             Assert.That(dobermanConfiguration.Pages.Contains(expectedUrl), Is.True);
         }
@@ -103,29 +103,29 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests AddDirectorySave adds directory to the Directories collection.
+        /// Tests CheckFileSave adds directory to the Directories collection.
         /// </summary>
         [Test]
-        public void AddDirectorySave_WithDirectory_AddsToDirectories()
+        public void CheckFileSave_WithDirectory_AddsToDirectories()
         {
             const string directory = "diretory/to/save/to";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddDirectorySave(directory);
+            dobermanConfiguration.CheckFileSave(directory);
 
             Assert.That(dobermanConfiguration.Directories.Contains(directory), Is.True);
         }
 
         /// <summary>
-        /// Tests when SetSaveFileDirectory is given a directory, the CheckSavesFile is set to true.
+        /// Tests when CheckFileSave is given a directory, the CheckSavesFile is set to true.
         /// </summary>
         [Test]
-        public void AddDirectorySave_WithDirectory_SetsHasDirectoriesToSaveToTrue()
+        public void CheckFileSave_WithDirectory_SetsHasDirectoriesToSaveToTrue()
         {
             const string directory = "diretory/to/save/to";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddDirectorySave(directory);
+            dobermanConfiguration.CheckFileSave(directory);
 
             Assert.That(dobermanConfiguration.HasDirectoriesToSave, Is.True);
         }
@@ -167,30 +167,30 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that AddSqlConnectionString with a valid connection string sets HasSqlConnectionStrings to true.
+        /// Tests that CheckSql with a valid connection string sets HasSqlConnectionStrings to true.
         /// </summary>
         [Test]
-        public void AddSqlConnectionString_WithConnectionString_HasSqlConnectionStringsToTrue()
+        public void CheckSql_WithConnectionString_HasSqlConnectionStringsToTrue()
         {
             var connectionString = @"Data Source=.\SQLEXPRESS;Integrated Security=True;database=DobermanTest";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddSqlConnectionString(connectionString);
+            dobermanConfiguration.CheckSql(connectionString);
 
             Assert.That(dobermanConfiguration.HasSqlConnectionStrings, Is.True);
         }
 
         /// <summary>
-        /// Tests that AddSqlConnectionString with a valid connection string adds the connection string to the SqlConnectionStrings
+        /// Tests that CheckSql with a valid connection string adds the connection string to the SqlConnectionStrings
         /// list stored on the configuration.
         /// </summary>
         [Test]
-        public void AddSqlConnectionString_WithConnectionString_SetsSqlServerConnectionString()
+        public void CheckSql_WithConnectionString_SetsSqlServerConnectionString()
         {
             var connectionString = @"Data Source=.\SQLEXPRESS;Integrated Security=True;database=DobermanTest";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddSqlConnectionString(connectionString);
+            dobermanConfiguration.CheckSql(connectionString);
 
             Assert.That(dobermanConfiguration.SqlConnectionStrings.Contains(connectionString), Is.True);
         }
@@ -214,29 +214,29 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests that AddMongoConnectionString with a valid connection string sets HasMongoConnectionStrings to true.
+        /// Tests that CheckMongo with a valid connection string sets HasMongoConnectionStrings to true.
         /// </summary>
         [Test]
-        public void AddMongoConnectionString_WithConnectionString_HasMongoConnectionStringsToTrue()
+        public void CheckMongo_WithConnectionString_HasMongoConnectionStringsToTrue()
         {
             var connectionString = @"mongodb://localhost/doberman-test";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddMongoConnectionString(connectionString);
+            dobermanConfiguration.CheckMongo(connectionString);
 
             Assert.That(dobermanConfiguration.HasMongoConnectionStrings, Is.True);
         }
 
         /// <summary>
-        /// Tests that AddMongoConnectionString adds the connection string to the MongoConnectionStrings list.
+        /// Tests that CheckMongo adds the connection string to the MongoConnectionStrings list.
         /// </summary>
         [Test]
-        public void AddMongoConnectionString_WithConnectionString_AddsConnectionStringToMongoConnectionStrings()
+        public void CheckMongo_WithConnectionString_AddsConnectionStringToMongoConnectionStrings()
         {
             var connectionString = @"mongodb://localhost/doberman-test";
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddMongoConnectionString(connectionString);
+            dobermanConfiguration.CheckMongo(connectionString);
 
             Assert.That(dobermanConfiguration.MongoConnectionStrings.Contains(connectionString), Is.True);
         }
@@ -321,50 +321,50 @@ namespace Doberman.Tests.Unit.Configuration
         }
 
         /// <summary>
-        /// Tests when AddSmtpServer is given valid host and port, the settings are added to the
+        /// Tests when CheckEmail is given valid host and port, the settings are added to the
         /// SmtpSettings list.
         /// </summary>
         [Test]
-        public void AddSmtpServer_ValidHostAndPort_ShouldAddToSmtpSettings()
+        public void CheckEmail_ValidHostAndPort_ShouldAddToSmtpSettings()
         {
             const string host = "mail.host.com";
             const int port = 445;
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddSmtpServer(host, port);
+            dobermanConfiguration.CheckEmail(host, port);
 
             Assert.That(dobermanConfiguration.SmtpSettings[0].Host, Is.EqualTo(host));
             Assert.That(dobermanConfiguration.SmtpSettings[0].Port, Is.EqualTo(port));
         }
 
         /// <summary>
-        /// Tests when AddSmtpServer is not given the enableSsl parameter, it saves the SmtpSettings
+        /// Tests when CheckEmail is not given the enableSsl parameter, it saves the SmtpSettings
         /// as not using ssl.
         /// </summary>
         [Test]
-        public void AddSmtpServer_WithNoEnableSsl_ShouldSetSslToFalse()
+        public void CheckEmail_WithNoEnableSsl_ShouldSetSslToFalse()
         {
             const string host = "mail.host.com";
             const int port = 445;
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddSmtpServer(host, port);
+            dobermanConfiguration.CheckEmail(host, port);
 
             Assert.That(dobermanConfiguration.SmtpSettings[0].Ssl, Is.False);
         }
 
         /// <summary>
-        /// Tests when AddSmtpServer is given the enableSsl parameter, it saves the SmtpSettings
+        /// Tests when CheckEmail is given the enableSsl parameter, it saves the SmtpSettings
         /// as the value of enableSsl
         /// </summary>
         [Test]
-        public void AddSmtpServer_WithEnableSsl_ShouldSetSslToTrue()
+        public void CheckEmail_WithEnableSsl_ShouldSetSslToTrue()
         {
             const string host = "mail.host.com";
             const int port = 445;
 
             var dobermanConfiguration = new DobermanConfiguration();
-            dobermanConfiguration.AddSmtpServer(host, port, true);
+            dobermanConfiguration.CheckEmail(host, port, true);
 
             Assert.That(dobermanConfiguration.SmtpSettings[0].Ssl, Is.True);
         }

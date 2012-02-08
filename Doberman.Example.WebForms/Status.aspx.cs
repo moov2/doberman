@@ -9,7 +9,7 @@ namespace Doberman.Example.WebForms
     {
         public Status() : base()
         {
-            Configuration.AddDirectorySave("Uploads");
+            Configuration.CheckFileSave("Uploads");
         }
     }
 }
