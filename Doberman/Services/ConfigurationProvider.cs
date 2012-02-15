@@ -39,7 +39,7 @@ namespace Doberman.Services
         {
             var network = (ConfigurationManager.GetSection("system.net/mailSettings/smtp") as SmtpSection).Network;
 
-            if (network == null)
+            if (network.Host == null)
                 return null;
 
             return new SmtpSettings { Host = network.Host, Port = network.Port, Ssl = network.EnableSsl };
