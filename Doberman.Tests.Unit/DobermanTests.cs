@@ -40,7 +40,7 @@ namespace Doberman.Tests.Unit
         {
             var configuration = _autoMoqer.GetMock<IConfiguration>();
             configuration.Setup(x => x.HasPagesToLoad).Returns(true);
-            configuration.Setup(x => x.Pages).Returns(new List<string>() { "www.google.co.uk", "www.moov2.com" });
+            configuration.Setup(x => x.Pages).Returns(new List<string>() { "http://www.google.co.uk", "http://www.moov2.com" });
 
             Assert.That(GetCountOfInstanceFromFetch<PageLoadsCheck>(configuration.Object), Is.EqualTo(2));
         }
@@ -65,7 +65,7 @@ namespace Doberman.Tests.Unit
         [Test]
         public void Fetch_ConfigurationHasPages_PageLoadsCheckHasUrlsFromConfiguration()
         {
-            const string ExpectedUrl = "www.google.co.uk";
+            const string ExpectedUrl = "http://www.google.co.uk";
 
             var configuration = _autoMoqer.GetMock<IConfiguration>();
             configuration.Setup(x => x.HasPagesToLoad).Returns(true);
