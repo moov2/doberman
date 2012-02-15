@@ -72,6 +72,8 @@ Check if a web page loads, if it loads then the test passes, otherwise it is dee
             : base()
         {
             Configuration.CheckPageLoad("http://my-website.com/My/Custom/Page");
+            Configuration.CheckPageLoad("My/Custom/Page");
+            Configuration.CheckPageLoad("/My/Custom/Page");
         }
     }
 
@@ -82,7 +84,9 @@ Check if a web page loads, if it loads then the test passes, otherwise it is dee
         public Doberman()
             : base()
         {
-            Configuration.CheckPageLoad("http://my-website.com/My/Custom/Page");
+            Configuration.CheckPageLoad("http://my-website.com/My/Custom/Page.aspx");
+            Configuration.CheckPageLoad("My/Custom/Page.aspx");
+            Configuration.CheckPageLoad("/My/Custom/Page.aspx");
         }
     }
 
