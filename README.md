@@ -11,6 +11,7 @@ Currently Doberman is capable of performing the checks listed below.
 * Mongo DB Connecting
 * File Saving
 * Email Sending
+* File Exists (v.0.2)
 
 ## Getting Started
 
@@ -217,5 +218,33 @@ Alternatively, just like the other checks you can add an email check in the cons
         public DobermanController() : base()
         {
             Configuration.CheckEmail("localhost", 25, true);
+        }
+    }
+
+### File Exists
+
+Checks to see if a directory of file exists in the project, if the path given does exist as a directory or file then the check is passed, otherwise it is deemed a failure. Examples are shown below of the different ways to enter the path for this check. Please ensure that when entering relative paths don't start the path with any slashes.
+
+#### MVC
+
+    public class DobermanController : BaseDobermanController
+    {
+        public DobermanController() : base()
+        {
+            Configuration.CheckFileExists("my/file.exe");
+            Configuration.CheckFileExists("my/directory/");
+            Configuration.CheckFileExists("C:/full/path/to/my/directory/");
+        }
+    }
+
+#### Web Forms
+
+    public partial class Doberman : DobermanPage 
+    {
+        public DobermanController() : base()
+        {
+            Configuration.CheckFileExists("my/file.exe");
+            Configuration.CheckFileExists("my/directory/");
+            Configuration.CheckFileExists("C:/full/path/to/my/directory/");
         }
     }
