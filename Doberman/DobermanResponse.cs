@@ -12,6 +12,7 @@ namespace Doberman
         public static void Html(HttpResponse response, IList<DobermanResult> results)
         {
             var failCount = results.Where(x => x.Success == false).ToList().Count;
+            var rootSireUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
 
             response.Write("<!DOCTYPE html>\n\n");
             response.Write("<html>\n\n");
@@ -61,9 +62,9 @@ namespace Doberman
             response.Write("\t\t<div id='content'>\n");
 
             if (failCount == 0)
-                response.Write("\t\t\t<h2>Everything is okay, all " + results.Count + " checks were successful.\n\n");
+                response.Write("\t\t\t<h2>Everything is okay with <strong>" + rootSireUrl + "</strong>, all " + results.Count + " checks were successful.\n\n");
             else
-                response.Write("\t\t\t<h2>Unfortunately <strong>" + failCount + "</strong> out of the <strong>" + results.Count + "</strong> checks have failed, details are shown below.\n\n");
+                response.Write("\t\t\t<h2>Unfortunately <strong>" + failCount + "</strong> out of the <strong>" + results.Count + "</strong> checks have failed for <strong>" + rootSireUrl + "</strong>, details are shown below.\n\n");
   
             response.Write("\t\t\t<ul>\n");
 
