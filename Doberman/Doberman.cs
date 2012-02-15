@@ -32,6 +32,12 @@ namespace Doberman
                     checks.Add(new PageLoadsCheck(url));
             }
 
+            if (configuration.HasPathsToExist)
+            {
+                foreach (var path in configuration.Paths)
+                    checks.Add(new FileExistsCheck(path));
+            }
+
             if (configuration.HasDirectoriesToSave)
             {
                 foreach (var directory in configuration.Directories)

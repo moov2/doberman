@@ -32,6 +32,14 @@ namespace Doberman.Configuration
         }
 
         /// <summary>
+        /// Flag indicating if there are paths to be tested.
+        /// </summary>
+        public bool HasPathsToExist
+        {
+            get { return Paths.Count > 0; }
+        }
+
+        /// <summary>
         /// Flag indicating whether a check should be done for sending an email.
         /// </summary>
         public bool HasSmtpSettings
@@ -63,6 +71,11 @@ namespace Doberman.Configuration
         public IList<string> Pages { get; private set; }
 
         /// <summary>
+        /// List of path urls to perform file exist checks on.
+        /// </summary>
+        public IList<string> Paths { get; private set; }
+
+        /// <summary>
         /// List of sql connection strings to perform connection tests on.
         /// </summary>
         public IList<string> SqlConnectionStrings { get; private set; }
@@ -77,6 +90,7 @@ namespace Doberman.Configuration
             Directories = new List<string>();
             MongoConnectionStrings = new List<string>();
             Pages = new List<string>();
+            Paths = new List<string>();
             SqlConnectionStrings = new List<string>();
             SmtpSettings = new List<SmtpSettings>();
         }
@@ -122,6 +136,17 @@ namespace Doberman.Configuration
         public IDobermanConfigurator CheckEmail(string host, int port, bool enableSsl)
         {
             return CheckEmail(new SmtpSettings { Host = host, Port = port, Ssl = enableSsl });
+        }
+
+        /// <summary>
+        /// Adds a path to a file or directory to check if it exists.
+        /// </summary>
+        /// <param name="path">Path to check if it exists as a file or directory.</param>
+        /// <returns>Itself.</returns>
+        public IDobermanConfigurator CheckFileExists(string path)
+        {
+            Paths.Add(path);
+            return this;
         }
 
         /// <summary>
@@ -187,6 +212,7 @@ namespace Doberman.Configuration
     {
         IDobermanConfigurator CheckEmail(string host, int port);
         IDobermanConfigurator CheckEmail(string host, int port, bool enableSsl);
+        IDobermanConfigurator CheckFileExists(string path);
         IDobermanConfigurator CheckFileSave(string directory);
         IDobermanConfigurator CheckMongo(string connectionString);
         IDobermanConfigurator CheckPageLoad(string url);

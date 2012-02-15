@@ -311,6 +311,52 @@ namespace Doberman.Tests.Unit
         }
 
         /// <summary>
+        /// Tests that the collection returned from Fetch contains a FileExistsCheck in the collection of checks, when
+        /// the configuration passed to Fetch has Paths.
+        /// </summary>
+        [Test]
+        public void Fetch_ConfigurationHasPaths_ReturnsFileExistsCheckEqualToTheNumberOfPaths()
+        {
+            var configuration = _autoMoqer.GetMock<IConfiguration>();
+            configuration.Setup(x => x.HasPathsToExist).Returns(true);
+            configuration.Setup(x => x.Paths).Returns(new List<string>() { "directory/to/exist", "another/directory.png" });
+
+            Assert.That(GetCountOfInstanceFromFetch<FileExistsCheck>(configuration.Object), Is.EqualTo(2));
+        }
+
+        /// <summary>
+        /// Tests that the collection returned from Fetch doesn't contain a FileExistsCheck in the collection of
+        /// checks, when the configuration passed to Fetch has no Paths.
+        /// </summary>
+        [Test]
+        public void Fetch_ConfigurationHasNoPaths_ReturnsDoesntContainFileExistsCheck()
+        {
+            var configuration = _autoMoqer.GetMock<IConfiguration>();
+            configuration.Setup(x => x.HasPathsToExist).Returns(false);
+            configuration.Setup(x => x.Paths).Returns(new List<string>());
+
+            Assert.That(GetCountOfInstanceFromFetch<FileExistsCheck>(configuration.Object), Is.EqualTo(0));
+        }
+
+        /// <summary>
+        /// Tests that when the configuration given to Fetch has Paths, the FileExistsCheck in the checks
+        /// returned has the same path value as in the Paths in the configuration.
+        /// </summary>
+        [Test]
+        public void Fetch_ConfigurationHasPathsToExistAsTrue_FileExistsCheckHasPathFromConfiguration()
+        {
+            const string ExpectedPath = "/directory/to/exist/to";
+
+            var configuration = _autoMoqer.GetMock<IConfiguration>();
+            configuration.Setup(x => x.HasPathsToExist).Returns(true);
+            configuration.Setup(x => x.Paths).Returns(new List<string>() { ExpectedPath });
+
+            var fileExistsCheck = GetInstanceFromFetch<FileExistsCheck>(configuration.Object)[0] as FileExistsCheck;
+
+            Assert.That(fileExistsCheck.Path, Is.EqualTo(ExpectedPath));
+        }
+
+        /// <summary>
         /// Creates a list of mock check objects.
         /// </summary>
         /// <returns>List of mock check objects.</returns>

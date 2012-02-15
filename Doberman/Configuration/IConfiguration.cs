@@ -10,12 +10,14 @@ namespace Doberman.Configuration
         bool HasDirectoriesToSave { get; }
         bool HasMongoConnectionStrings { get; }
         bool HasPagesToLoad { get; }
+        bool HasPathsToExist { get; }
         bool HasSqlConnectionStrings { get; }
         bool HasSmtpSettings { get; }
 
         IList<string> Directories { get; }
         IList<string> MongoConnectionStrings { get; }
         IList<string> Pages { get; }
+        IList<string> Paths { get; }
         IList<string> SqlConnectionStrings { get; }
         IList<SmtpSettings> SmtpSettings { get; }
     }

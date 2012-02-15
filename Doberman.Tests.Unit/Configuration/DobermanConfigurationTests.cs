@@ -368,5 +368,52 @@ namespace Doberman.Tests.Unit.Configuration
 
             Assert.That(dobermanConfiguration.SmtpSettings[0].Ssl, Is.True);
         }
+
+        /// <summary>
+        /// Tests that by default HasPathsToExist is false.
+        /// </summary>
+        [Test]
+        public void Default_HasPathsToExist_IsFalse()
+        {
+            Assert.That(new DobermanConfiguration().HasPathsToExist, Is.False);
+        }
+
+        /// <summary>
+        /// Tests that by default Paths is an empty list.
+        /// </summary>
+        [Test]
+        public void Default_Paths_IsEmpty()
+        {
+            Assert.That(new DobermanConfiguration().Paths.Count, Is.EqualTo(0));
+        }
+
+        /// <summary>
+        /// Tests CheckFileExists adds path to the Paths collection.
+        /// </summary>
+        [Test]
+        public void CheckFileExists_WithPath_AddsToPath()
+        {
+            const string path = "diretory/to/check/exists";
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.CheckFileExists(path);
+
+            Assert.That(dobermanConfiguration.Paths.Contains(path), Is.True);
+        }
+
+        /// <summary>
+        /// Tests when CheckFileExists is given a directory, the HasPathsToExist is set to true.
+        /// </summary>
+        [Test]
+        public void CheckFileSave_WithPath_SetsHasPathsToExistToTrue()
+        {
+            const string path = "diretory/to/check/exists";
+
+            var dobermanConfiguration = new DobermanConfiguration();
+            dobermanConfiguration.CheckFileExists(path);
+
+            Assert.That(dobermanConfiguration.HasPathsToExist, Is.True);
+        }
+
     }
 }

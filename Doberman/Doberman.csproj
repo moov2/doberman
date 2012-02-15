@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Checks\ConnectToMongoCheck.cs" />
     <Compile Include="Checks\ConnectToSqlServerCheck.cs" />
+    <Compile Include="Checks\FileExistsCheck.cs" />
     <Compile Include="Checks\ICheck.cs" />
     <Compile Include="Checks\SavingFileCheck.cs" />
     <Compile Include="Checks\SendingEmailCheck.cs" />
