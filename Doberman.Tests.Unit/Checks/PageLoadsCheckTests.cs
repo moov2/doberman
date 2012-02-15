@@ -13,7 +13,7 @@ namespace Doberman.Tests.Unit.Checks
         [Test]
         public void Constructor_ValidUrl_SetsPageUrl()
         {
-            const string Url = "www.google.co.uk";
+            const string Url = "http://www.google.co.uk";
 
             Assert.That(new PageLoadsCheck(Url).PageUrl, Is.EqualTo(Url));
         }
