@@ -8,11 +8,15 @@ namespace Doberman.Checks
     {
         private const string CheckName = "File Exists";
 
-
         /// <summary>
         /// Path to file that is being checked that it exists.
         /// </summary>
         public string Path { get; private set; }
+
+        /// <summary>
+        /// Original path entered into the constructor.
+        /// </summary>
+        private string _originalPath;
 
         /// <summary>
         /// Returns the base directory of this assembly.
@@ -24,7 +28,8 @@ namespace Doberman.Checks
 
         public FileExistsCheck(string path)
         {
-            Path = NeedsBaseDirectory(path) ? BaseDirectory + path : path;
+            _originalPath = path;
+            Path = NeedsBaseDirectory(_originalPath) ? BaseDirectory + _originalPath : _originalPath;
         }
 
         public DobermanResult Execute()
@@ -34,17 +39,17 @@ namespace Doberman.Checks
             if (File.Exists(Path))
             {
                 result.Success = true;
-                result.Detail = "File does exist.";
+                result.Detail = _originalPath + " file does exist.";
             }
             else if (Directory.Exists(Path))
             {
                 result.Success = true;
-                result.Detail = "Directory does exist.";
+                result.Detail = _originalPath + " directory does exist.";
             }
             else
             {
                 result.Success = false;
-                result.Detail = "Unable to locate file or directory matching path.";
+                result.Detail = "Unable to locate file or directory matching " + _originalPath + ".";
             }
 
             return result;
