@@ -9,7 +9,7 @@ namespace Doberman.Checks
     public class PageLoadsCheck : ICheck
     {
         private const string CheckName = "Page Loads";
-        private const int TimeOut = 1000 * 180; // 3 minutes
+        private const int TimeOut = 20000;
 
         public string PageUrl { get; private set; }
 
