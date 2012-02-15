@@ -26,6 +26,10 @@ namespace Doberman.Checks
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(PageUrl));
                 request.Timeout = TimeOut;
+                request.KeepAlive = false;
+                request.Headers.Add("Cache-Control", "no-cache");
+                request.Headers.Add("Pragma", "no-cache");
+
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 // TODO: I think there maybe more work required here to ensure that the home page is functioning as expected.
@@ -35,6 +39,7 @@ namespace Doberman.Checks
                     result.Detail = PageUrl + " is loading just fine.";
 
                 response.Close();
+                request.Abort();
             }
             catch (Exception ex)
             {
