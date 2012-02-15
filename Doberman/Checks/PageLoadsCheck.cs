@@ -9,6 +9,7 @@ namespace Doberman.Checks
     public class PageLoadsCheck : ICheck
     {
         private const string CheckName = "Page Loads";
+        private const int TimeOut = 1000 * 180; // 3 minutes
 
         public string PageUrl { get; private set; }
 
@@ -24,6 +25,7 @@ namespace Doberman.Checks
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(PageUrl));
+                request.Timeout = TimeOut;
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 // TODO: I think there maybe more work required here to ensure that the home page is functioning as expected.
@@ -31,6 +33,8 @@ namespace Doberman.Checks
 
                 if (result.Success)
                     result.Detail = PageUrl + " is loading just fine.";
+
+                response.Close();
             }
             catch (Exception ex)
             {
