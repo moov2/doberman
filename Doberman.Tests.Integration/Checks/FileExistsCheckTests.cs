@@ -13,7 +13,7 @@ namespace Doberman.Tests.Integration.Checks
         [Test]
         public void Execute_FileExists_Success()
         {
-            Assert.That(new FileExistsCheck("App.config").Execute().Success, Is.True);
+            Assert.That(new FileExistsCheck("Doberman.dll").Execute().Success, Is.True);
         }
 
         /// <summary>
@@ -33,8 +33,7 @@ namespace Doberman.Tests.Integration.Checks
         [Test]
         public void Execute_PathContainsFullPathAndFileExists_Success()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory.Replace("bin\\Debug", "");
-            Assert.That(new FileExistsCheck(baseDir + "App.config").Execute().Success, Is.True);
+            Assert.That(new FileExistsCheck(AppDomain.CurrentDomain.BaseDirectory + "\\Doberman.dll").Execute().Success, Is.True);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Doberman.Tests.Integration.Checks
         [Test]
         public void Execute_PathIsADirectoryThatExists_Success()
         {
-            Assert.That(new FileExistsCheck("Checks/").Execute().Success, Is.True);
+            Assert.That(new FileExistsCheck(AppDomain.CurrentDomain.BaseDirectory).Execute().Success, Is.True);
         }
     }
 }

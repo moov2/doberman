@@ -19,7 +19,7 @@ namespace Doberman.Checks
         /// </summary>
         public string BaseDirectory
         {
-            get { return AppDomain.CurrentDomain.BaseDirectory.Replace("bin\\Debug", ""); }
+            get { return AppDomain.CurrentDomain.BaseDirectory + "\\"; }
         }
 
         public FileExistsCheck(string path)
