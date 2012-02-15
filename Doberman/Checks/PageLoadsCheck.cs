@@ -11,11 +11,32 @@ namespace Doberman.Checks
         private const string CheckName = "Page Loads";
         private const int TimeOut = 20000;
 
+        private string _originalPageUrl;
+
         public string PageUrl { get; private set; }
+
+        /// <summary>
+        /// Gets the URL to the root of the site.
+        /// </summary>
+        private string SiteRootUrl
+        {
+            get { 
+                var url = HttpContext.Current.Request.Url;
+                return url.Scheme + "://" + url.Authority;
+            }
+        }
 
         public PageLoadsCheck(string pageUrl)
         {
-            PageUrl = pageUrl;
+            _originalPageUrl = pageUrl;
+
+            if (NeedsSiteRoot(_originalPageUrl))
+            {
+                PageUrl = SiteRootUrl;
+                PageUrl += (_originalPageUrl.StartsWith("/")) ? _originalPageUrl : "/" + _originalPageUrl; 
+            }
+            else
+                PageUrl = _originalPageUrl;
         }
 
         public DobermanResult Execute()
@@ -48,6 +69,16 @@ namespace Doberman.Checks
             }
 
             return result;
+        }
+        
+        /// <summary>
+        /// Indicates whether the given url requires the site root url.
+        /// </summary>
+        /// <param name="url">URL to be verified.</param>
+        /// <returns>True if requires root site url, otherwise false.</returns>
+        private static bool NeedsSiteRoot(string url)
+        {
+            return !(url.StartsWith("http://") || url.StartsWith("https://"));
         }
     }
 }

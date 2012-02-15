@@ -15,6 +15,8 @@ namespace Doberman.Example.Mvc3.Controllers
         {
             Configuration.CheckEmail("smtp.gmail.com", 465, true);
             Configuration.CheckFileExists("Web.config");
+            Configuration.CheckPageLoad("Account/Register");
+            Configuration.CheckPageLoad("/Account/Register");
         }
     }
 }
