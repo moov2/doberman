@@ -235,9 +235,9 @@ Checks to see if a directory of file exists in the project, if the path given do
     {
         public DobermanController() : base()
         {
-            Configuration.CheckFileExists("my/file.exe");
-            Configuration.CheckFileExists("my/directory/");
-            Configuration.CheckFileExists("C:/full/path/to/my/directory/");
+            Configuration.CheckFileExists(@"my\file.exe");
+            Configuration.CheckFileExists(@"my\directory\");
+            Configuration.CheckFileExists(@"C:\full\path\to\my\directory\");
         }
     }
 
@@ -247,8 +247,8 @@ Checks to see if a directory of file exists in the project, if the path given do
     {
         public DobermanController() : base()
         {
-            Configuration.CheckFileExists("my/file.exe");
-            Configuration.CheckFileExists("my/directory/");
-            Configuration.CheckFileExists("C:/full/path/to/my/directory/");
+            Configuration.CheckFileExists(@"my\file.exe");
+            Configuration.CheckFileExists(@"my\directory\");
+            Configuration.CheckFileExists(@"C:\full\path\to\my\directory\");
         }
     }
